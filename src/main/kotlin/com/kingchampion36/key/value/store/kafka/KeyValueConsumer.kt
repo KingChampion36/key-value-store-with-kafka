@@ -54,7 +54,7 @@ class KeyValueConsumer(
         it.saveInCache()
       }
     }
-    log.info { "Security audit cache has been initialized successfully" }
+    log.info { "Cache has been initialized successfully" }
   }
 
   @Async
