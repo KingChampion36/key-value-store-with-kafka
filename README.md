@@ -62,6 +62,29 @@ Go to the app directory and run this command
 mvn spring-boot:run
 ```
 
+### 8. Put in Cache
+
+```shell
+curl --location 'localhost:8080/put' \
+--header 'Content-Type: application/json' \
+--data '{
+    "key": "India",
+    "value": "New Delhi"
+}'
+```
+
+### 9. Get from Cache
+
+```shell
+curl --location 'localhost:8080/keys/India'
+```
+
+### 10. Delete from Cache
+
+```shell
+curl --location --request DELETE 'localhost:8080/keys/India'
+```
+
 ## How this app acts as a key value store?
 
 During the application startup, the kafka consumer starts reading from the beginning of the topic to the end of the topic and saves each record in local cache.
