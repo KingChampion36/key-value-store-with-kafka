@@ -73,13 +73,13 @@ curl --location 'localhost:8080/put' \
 }'
 ```
 
-### 8. Get from Cache
+### 9. Get from Cache
 
 ```shell
 curl --location 'localhost:8080/keys/India'
 ```
 
-### 9. Delete from Cache
+### 10. Delete from Cache
 
 ```shell
 curl --location --request DELETE 'localhost:8080/keys/India'
