@@ -4,6 +4,7 @@ import com.kingchampion36.key.value.store.config.KafkaConfig
 import com.kingchampion36.key.value.store.repository.KeyValueRepository
 import io.github.oshai.kotlinlogging.KotlinLogging
 import jakarta.annotation.PostConstruct
+import jakarta.annotation.PreDestroy
 import org.apache.kafka.clients.consumer.ConsumerConfig.AUTO_OFFSET_RESET_CONFIG
 import org.apache.kafka.clients.consumer.ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG
 import org.apache.kafka.clients.consumer.ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG
@@ -79,5 +80,11 @@ class KeyValueConsumer(
 
   private fun ConsumerRecord<String, String>.saveInCache() {
     keyValueRepository.save(key = key(), value = value())
+  }
+
+  @PreDestroy
+  private fun shutdown() {
+    running.set(false)
+    kafkaConsumer.close()
   }
 }
