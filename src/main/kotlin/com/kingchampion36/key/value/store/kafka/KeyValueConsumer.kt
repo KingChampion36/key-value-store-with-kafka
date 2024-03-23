@@ -4,6 +4,12 @@ import com.kingchampion36.key.value.store.config.KafkaConfig
 import com.kingchampion36.key.value.store.repository.KeyValueRepository
 import io.github.oshai.kotlinlogging.KotlinLogging
 import jakarta.annotation.PostConstruct
+import org.apache.kafka.clients.consumer.ConsumerConfig.AUTO_OFFSET_RESET_CONFIG
+import org.apache.kafka.clients.consumer.ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG
+import org.apache.kafka.clients.consumer.ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG
+import org.apache.kafka.clients.consumer.ConsumerConfig.GROUP_ID_CONFIG
+import org.apache.kafka.clients.consumer.ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG
+import org.apache.kafka.clients.consumer.ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG
 import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.apache.kafka.clients.consumer.KafkaConsumer
 import org.apache.kafka.common.TopicPartition
@@ -13,6 +19,7 @@ import org.springframework.context.event.EventListener
 import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Component
 import java.time.Duration
+import java.util.UUID
 import java.util.concurrent.atomic.AtomicBoolean
 
 @Component
@@ -24,10 +31,12 @@ class KeyValueConsumer(
   private val log = KotlinLogging.logger { }
 
   private val consumerConfig = mapOf(
-    "bootstrap.servers" to listOf(kafkaConfig.bootstrapServer),
-    "key.deserializer" to StringDeserializer::class.qualifiedName,
-    "value.deserializer" to StringDeserializer::class.qualifiedName,
-    "auto.offset.reset" to "earliest"
+    BOOTSTRAP_SERVERS_CONFIG to listOf(kafkaConfig.bootstrapServer),
+    KEY_DESERIALIZER_CLASS_CONFIG to StringDeserializer::class.qualifiedName,
+    VALUE_DESERIALIZER_CLASS_CONFIG to StringDeserializer::class.qualifiedName,
+    AUTO_OFFSET_RESET_CONFIG to "earliest",
+    ENABLE_AUTO_COMMIT_CONFIG to false,
+    GROUP_ID_CONFIG to UUID.randomUUID().toString()
   )
 
   private val kafkaConsumer = KafkaConsumer<String, String>(consumerConfig)
